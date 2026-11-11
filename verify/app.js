@@ -45,7 +45,37 @@ const PAYMENT_TYPES = {
  * RFC 9162 inclusion path for it (leaf hash, index, tree size, audit path) taken
  * from the public anchor log. The path is data, not trust: the root it folds to
  * is compared against notary-node.near on the button press. */
-const EXAMPLES = __EXAMPLES__;
+const EXAMPLES = [
+  {
+    "label": "anchored \u00b7 anchor 94",
+    "pdr_b64": "AwEFA6L0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP2IXYc7qTouh+piEViiyGYJ63YdLJTxvJMoZdhJtF82AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADueh04v6jfyIpVyWbfCPactDGhYlr1GjsgbRSRLjXFG/8gvweFq/RBFq5V4vW98DJsOiExZuc9S+WlOehBKVG8o795xK5+6gQWoX6zl5TS7D7z0gK9fQ8K4d14lYgblAk=",
+    "note": "Real receipt, ledger record 230 \u2014 the last leaf of the tree anchored at seq 94. Its published inclusion path is bundled, so the root is folded in this tab.",
+    "leaf": "1498211e1c9ce82eae7dcff76a49f330efb8b0b8dd213a8883cfc6a7273b5514",
+    "index": 235,
+    "size": 236,
+    "path": [
+      "4e12e425aa895028eef2beb6ef5ec9cc30f2dfb49db1ddb167f7028d630c9fac",
+      "74da7fa1f64d04e1b0fcfcd64988ef2398325e7dc87dc1064f42b408260d7f8d",
+      "ae21215ff42f151cb710d4791a54daa0d4edd1cd367c217ab1c2d1d763019256",
+      "afbce9df3b933040941d06b1d957aadd53664344fa8aaf0db60b5f0970c54772",
+      "c1a44c23563d9b15bc5813fd994f9775ad1fe4ceb3524eeeb84fd8c8bdeddf2d",
+      "fb5de336a99a01dc0951c25cfba642c894ba25886f76b9d0cf5418bbc8aa0858"
+    ],
+    "anchor_seq": 94
+  },
+  {
+    "label": "shield 91ce7b66",
+    "pdr_b64": "AwEA7cT0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALl11lm/ECxm3lxob99z10UEfHe+mqPiOvzd0tBHrhvMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEqcN0IpH3lwTPc74wxPaAtbI0oasp9ypnnivpc7/Pa6v+HKfQBS4XcW/IJTFr3ED7titGfZ4qNAvJd2KnCaYQM=",
+    "note": "Real receipt from the public log (shield 91ce7b66, 2026-11-11 19:41:33Z). Free record: no anchor root committed, so the chain check has nothing to compare.",
+    "anchor_seq": 94
+  },
+  {
+    "label": "shield 266e9612",
+    "pdr_b64": "AwEA6cv0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeK54EoibFcCH2VEZu8k/W91wH9ZFbe2ugnhCfXqh2DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANn//bPUHfDxUbfA+LqIRXAHiDI4S8NOAot2PHvAaLrXMhAbmNKrqnBpV0CbhX7ZlVK1KUbcT2WGaGj6ujAVMwg=",
+    "note": "Real receipt from the public log (shield 266e9612, 2026-11-11 20:11:21Z). Free record: no anchor root committed, so the chain check has nothing to compare.",
+    "anchor_seq": 94
+  }
+];
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -151,10 +181,11 @@ async function ed25519Verify(sig, msg, pub) {
   } catch (e) {
     /* fall through */
   }
-  // 2) @noble/ed25519 from esm.sh
+  // 2) @noble/ed25519 from esm.sh (async API — v2 sync verify needs a hash hook)
   try {
     const ed = await import('https://esm.sh/@noble/ed25519@2.3.0');
-    const ok = await ed.verify(sig, msg, pub);
+    const runner = ed.verifyAsync || ed.verify;
+    const ok = await runner(sig, msg, pub);
     ed25519Method = 'noble';
     return { ok, method: '@noble/ed25519 (fallback, loaded from esm.sh)' };
   } catch (e) {
@@ -382,7 +413,7 @@ async function checkNear() {
   if (foldedHex && foldedHex === chain.root) {
     verdict.className = 'verdict ok';
     verdict.textContent = 'MATCH — this record is in the tree the chain holds';
-    setPlate('plateAnchor', 'ok', 'ANCHORED', toHex(fromHex(chain.root)).slice(0, 16) + '… @ ' + seq);
+    setPlate('plateAnchor', 'ok', 'ANCHORED', chain.root.slice(0, 16) + '… @ anchor ' + seq);
   } else if (foldedHex) {
     verdict.className = 'verdict bad';
     verdict.textContent = 'MISMATCH — folded root ≠ on-chain root';

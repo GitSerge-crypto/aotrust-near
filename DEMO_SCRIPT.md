@@ -27,12 +27,12 @@ The claim the video makes is narrow: *a file existed at a time, and you can chec
 |---|---|
 | Contract | `notary-node.near` |
 | Prize wallet | `notary-node.near` |
-| Records in the journal | **231** |
+| Records in the journal | **245** (live, 2026-11-11 21:30 UTC) |
 | Anchors in local history | **33** |
 | On-chain Merkle root | `079074f46263a223bf2ab7af60754111b68609d79c87c5bf1e83b5e158cd7865` (truncate on screen to `079074f4…7865`) |
 | Anchor sequence | **94** |
 | Receipt size | **239 bytes**, Ed25519 signature, SHA-256 of the file inside |
-| Exit kit result | **33/33** local roots match the chain |
+| Exit kit result | **35/35** local roots match the chain |
 
 Anything not in this table is not said and not shown.
 
@@ -142,10 +142,10 @@ If the on-chain read fails during the take, do **not** fake the green state and 
 
 **Do:**
 - 1:15 cut to the README. Cursor moves once, down to `notary-node.near`, and stops.
-- 1:20 cut to a terminal or the exit-kit output, showing the `33/33` line against the live journal. Hold 6 s.
+- 1:20 cut to a terminal or the exit-kit output, showing the `35/35` line against the live journal. Hold 6 s.
 - 1:26 cut to the end card: black, two lines, no logo animation.
 
-**On screen must show:** the contract account name, the exit-kit summary line (`33/33` roots matched), then the end card.
+**On screen must show:** the contract account name, the exit-kit summary line (`35/35` roots matched), then the end card.
 
 **End card text:**
 ```
@@ -171,7 +171,7 @@ github.com/GitSerge-crypto/aotrust-near
 >
 > That is the whole claim. Existence at a time, proven by a signature and a root already on NEAR. You do not need us to believe it. The exit kit replays all thirty-three anchors against the chain.
 
-Silent version: keep all captions, drop the voiceover, add `231 records · 33 anchors · root on chain` as a small persistent lower-third in scenes 2–3.
+Silent version: keep all captions, drop the voiceover, add `245 records · 35 anchors · root on chain` as a small persistent lower-third in scenes 2–3.
 
 ---
 
