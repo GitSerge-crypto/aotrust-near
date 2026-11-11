@@ -167,7 +167,7 @@ recorded roots recomputes from the 245 leaves; and the newest anchor equals what
 `get_root(96)` returns from mainnet. The log is checked against the chain, not against us.
 
 `export` writes `journal.jsonl`, `anchors.jsonl`, `leaves.jsonl`, `MANIFEST.json` (SHA-256 of each
-file, counts, PDR layout, notary public key) and a `README.md` explaining the directory. Delete the
+file, counts, PDR layout, notary public key) and a `README.md` explaining the directory. With the
 vendor gone, that directory still verifies: signatures against the key in `MANIFEST.json`, inclusion
 against a root that a NEAR transaction committed.
 
