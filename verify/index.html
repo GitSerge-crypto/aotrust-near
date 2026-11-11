@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AOTrust — receipt verifier (no vendor in the path)</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="wrap">
+
+  <header class="head">
+    <h1>AOTrust receipt verifier</h1>
+    <p class="sub">239 bytes. Ed25519. NEAR. This page has no AOTrust backend in the path —
+      it parses the receipt, checks the signature in your browser and reads the anchor root
+      straight from <code>notary-node.near</code>.</p>
+  </header>
+
+  <section class="card">
+    <label class="lbl" for="pdr">Receipt — base64 (as the API returns it) or hex</label>
+    <textarea id="pdr" spellcheck="false" rows="5"
+      placeholder="Paste a 239-byte PDR here…"></textarea>
+
+    <div class="row">
+      <button id="verifyBtn" class="btn primary" type="button">Verify locally</button>
+      <button id="clearBtn" class="btn" type="button">Clear</button>
+      <span class="len" id="lenInfo"></span>
+    </div>
+
+    <div class="examples">
+      <span class="exlbl">Examples</span>
+      <button class="chip" type="button" data-ex="0">anchored · anchor 94</button>
+      <button class="chip" type="button" data-ex="1">shield 91ce7b66</button>
+      <button class="chip" type="button" data-ex="2">shield 266e9612</button>
+    </div>
+    <p class="hint" id="exHint">Real receipts from the public log. Nothing leaves this page
+      until you press “Check against NEAR”.</p>
+  </section>
+
+  <section class="plates" aria-live="polite">
+    <div class="plate idle" id="plateStruct">
+      <div class="ptitle">Structure</div>
+      <div class="pverdict">not checked</div>
+      <div class="pdetail">waiting for a receipt</div>
+    </div>
+    <div class="plate idle" id="plateSig">
+      <div class="ptitle">Notary signature</div>
+      <div class="pverdict">not checked</div>
+      <div class="pdetail">Ed25519 over the envelope</div>
+    </div>
+    <div class="plate idle" id="plateAnchor">
+      <div class="ptitle">Anchor root</div>
+      <div class="pverdict">not checked</div>
+      <div class="pdetail">on-chain root</div>
+    </div>
+  </section>
+
+  <section class="card" id="fieldsCard" hidden>
+    <h2>Parsed receipt</h2>
+    <dl class="fields" id="fields"></dl>
+  </section>
+
+  <section class="card" id="nearCard" hidden>
+    <h2>Check against NEAR</h2>
+    <div class="row">
+      <label class="lbl inline" for="seq">anchor seq</label>
+      <input id="seq" type="number" min="1" step="1" value="94">
+      <button id="nearBtn" class="btn primary" type="button">Check against NEAR</button>
+      <span class="len" id="nearNote"></span>
+    </div>
+
+    <div class="near" id="nearOut" hidden>
+      <div class="nline"><span class="nk">on-chain root</span><code id="onchainRoot">—</code></div>
+      <div class="nline"><span class="nk">receipt root</span><code id="receiptRoot">—</code></div>
+      <div class="nline" id="localRootLine" hidden><span class="nk">recomputed root</span><code id="localRoot">—</code></div>
+      <div class="verdict" id="nearVerdict">—</div>
+      <div class="nmeta" id="nearMeta"></div>
+    </div>
+  </section>
+
+  <details class="how">
+    <summary>How this works</summary>
+    <ol>
+      <li><b>file</b> — the artifact never leaves the machine; only its SHA-256 is sent to the notary.</li>
+      <li><b>SHA-256</b> — the digest of the file is the <code>payload_hash</code> field inside the receipt.</li>
+      <li><b>receipt (signature)</b> — <code>notary-node.near</code> signs the 175-byte payload with Ed25519:
+        <code>sha256-free envelope = u32LE(2147484061) ‖ u32LE(175) ‖ payload</code>. Verify it here with the
+        notary public key — no server needed.</li>
+      <li><b>Merkle leaf</b> — the record is a leaf in an RFC 9162 tree: <code>leaf = SHA-256(0x00 ‖ record)</code>,
+        <code>node = SHA-256(0x01 ‖ left ‖ right)</code>.</li>
+      <li><b>hourly / cumulative root</b> — folding the audit path from the leaf upwards yields one 32-byte root.
+        If your fold equals the root the chain holds, the record is in that tree.</li>
+      <li><b>NEAR transaction</b> — the root is committed by the contract <code>notary-node.near</code>;
+        <code>get_root(seq)</code> is a public read on any RPC. That is the only thing this page trusts.</li>
+    </ol>
+  </details>
+
+  <footer class="foot">
+    <span>Verifiable without the vendor.</span>
+    <span>contract <code>notary-node.near</code></span>
+  </footer>
+
+</main>
+<script src="app.js"></script>
+</body>
+</html>

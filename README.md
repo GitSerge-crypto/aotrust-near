@@ -60,8 +60,10 @@ This repository is the code for (2) and (3), plus the verifiers that make (1) ch
 
 ## Try it
 
-Everything below runs from a clone. No account, no key, no AOTrust server, no database. Steps 1–3
-need nothing but Python 3.9+; step 4 needs `pynacl`; step 6 needs nothing but a browser.
+Steps 1–3 and 5 run from a clone with no data and no credentials: stdlib Python and a browser.
+Step 4 needs `pip install pynacl` and a copy of a ledger database, which only the operator has — it is
+included here because `verify` and `roots` are what a third party runs on the export. Step 6 spends
+gas and needs `py-near` plus a funded contract key.
 
 ### 1. Build a Merkle root and see exactly what would be sent to NEAR
 
@@ -77,12 +79,15 @@ leaves: 3 (sorted by log_index, RFC 9162)
 merkle root: 84cbdbc2c7b0cb0c1198c4f10a4cfef5a4456794e18a9b0ffc16f99ad1637f6a
 tree size: 3
 contract: notary-node.near @ https://rpc.mainnet.near.org
-chain sequence: 97 -> anchor_seq 97          # 97 is whatever the contract reports right now
-DRY RUN: would call anchor("84cbdbc2…37f6a") on notary-node.near (gas 30 Tgas)
+chain sequence: 97 -> anchor_seq 97
+DRY RUN: would call anchor("84cbdbc2c7b0cb0c1198c4f10a4cfef5a4456794e18a9b0ffc16f99ad1637f6a") on notary-node.near (gas 30 Tgas)
 DRY RUN: anchor_seq would be 97 (assigned by the contract, not by this script)
 DRY RUN: no transaction sent, anchors.jsonl untouched
 to send for real: export NEAR_ACCOUNT_KEY=... then add --send
 ```
+
+The two `97` lines are whatever `sequence()` reports at that moment — they move as the log grows.
+The root over these three example leaves does not: it is `84cbdbc2…37f6a` every time.
 
 No network at all? Add `--offline`, and the sequence line reports `skipped`. Machine-readable
 output for CI: `--json` prints one JSON object instead of the block above.
@@ -140,21 +145,30 @@ python3 tools/aotrust_export.py roots  --dir ./export
 python3 tools/aotrust_export.py roots  --dir ./export --rpc https://rpc.mainnet.near.org
 ```
 
-→ four results, in order. The counts below come from one export of the production ledger; on your
-own copy they are whatever your copy holds, and the check is the same:
+→ the four commands above, in order. This is a real run against the production ledger on 2026-11-11;
+counts on your own copy are whatever your copy holds, and the checks are the same. The fourth command
+repeats the root replay and then adds the on-chain comparison, which is why the `roots:` line appears
+twice:
 
 ```
 exported: /path/to/export
-  journal=231 anchors=33 leaves=231          # counts from your own ledger
-receipts: ok=231 bad=0 without-pdr=0          # every PDR parses and carries a valid notary signature
-roots: checked=33 mismatched=0 (leaves=231, anchors=33)   # every recorded root recomputes from leaves
-on-chain root (notary-node.near): 079074f4…7865
-  matches latest anchor #94: True             # the log is checked against the chain, not against us
+  journal=239 anchors=35 leaves=245
+receipts: ok=30 bad=0 without-pdr=209
+roots: checked=35 mismatched=0 (leaves=245, anchors=35)
+roots: checked=35 mismatched=0 (leaves=245, anchors=35)
+on-chain root (notary-node.near): 5ca73b0fed6413ef890f78193370bcc4cbbdce00a2ba5d424ae6906bb300b136
+  matches latest anchor #96: True
 ```
+
+Reading those five lines: 239 journal records, of which 30 carry an external PDR whose structure and
+notary signature check out and 209 predate the external receipt (logged internal records, nothing to
+verify a signature on — the tool says so instead of counting them as passes); every one of the 35
+recorded roots recomputes from the 245 leaves; and the newest anchor equals what
+`get_root(96)` returns from mainnet. The log is checked against the chain, not against us.
 
 `export` writes `journal.jsonl`, `anchors.jsonl`, `leaves.jsonl`, `MANIFEST.json` (SHA-256 of each
 file, counts, PDR layout, notary public key) and a `README.md` explaining the directory. Delete the
-vendor and that directory still verifies: signatures against the key in `MANIFEST.json`, inclusion
+vendor gone, that directory still verifies: signatures against the key in `MANIFEST.json`, inclusion
 against a root that a NEAR transaction committed.
 
 Exit codes are the interface: `0` = everything checked out, non-zero = something did not.
@@ -241,7 +255,7 @@ README does not pretend otherwise.
 
 | | before the window (baseline) | added in the window (from 2026-10-19) |
 |---|---|---|
-| NEAR anchor contract `notary-node.near` | deployed and anchoring since before the window; `anchor` / `get_root` / `sequence` unchanged | — |
+| NEAR anchor contract `notary-node.near` | deployed before the window (contract v1.0.0, unchanged since); the local anchor history only starts at seq 62 on 2026-10-22, so 62 roots were already on chain by then | — |
 | hourly anchor job | running in the production service against the SQLite ledger | `scripts/anchor.py`, a standalone port that reads `leaves.jsonl`, with dry run by default and no key path in the repo |
 | receipts (PDR) | 239-byte format, Ed25519 over NEP-413, in production | — |
 | Merkle log | RFC 9162, cumulative, in production | — |
@@ -262,8 +276,8 @@ near deploy notary-node.near \
   --initFunction new --initArgs '{}'
 ```
 
-`contract/build/merkle_anchor.wasm` is a prebuilt artefact of `contract/src/lib.rs` (62 KB,
-`opt-level="z"`, LTO, panic=abort) for reviewers without a Rust toolchain. See
+`contract/build/merkle_anchor.wasm` is a prebuilt artefact of `contract/src/lib.rs` (61 KB / 62,484
+bytes, `opt-level="z"`, LTO, panic=abort) for reviewers without a Rust toolchain. See
 [`contract/README.md`](contract/README.md) for the method list, access control and storage notes.
 
 ## Data formats
