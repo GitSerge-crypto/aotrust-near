@@ -53,7 +53,7 @@ This repository is the code for (2) and (3), plus the verifiers that make (1) ch
 | `scripts/anchor.py` | standalone anchor job: `leaves.jsonl` → Merkle root → NEAR; dry run by default |
 | `tools/aotrust_export.py` | exit kit: `export` / `verify` / `roots`, works on an exported directory |
 | `tools/verify_inclusion.py` | offline Merkle inclusion-proof check (stdlib only, RFC 9162) |
-| `verify/` | static browser page: recompute a hash, fold the proof, read `get_root` from a public RPC |
+| `verify/` | static browser page: paste a receipt, read `get_root` from a public RPC, compare the roots |
 | `examples/leaves.jsonl` | 3 synthetic leaves showing the leaf file format (no client data) |
 | `SECURITY.md` | how to report a vulnerability, scope, key policy |
 | `DEMO_SCRIPT.md` | shot list for the 90-second demo recording |
@@ -182,10 +182,12 @@ receipt:
 python3 -m http.server 8000 --directory verify   # then open http://localhost:8000/
 ```
 
-→ the page recomputes the SHA-256 in the browser, folds the Merkle proof to a root, and the
-**Check against NEAR** button fetches `get_root` from a public RPC and shows whether the recomputed
-root equals the on-chain one, with the root string and the anchor sequence on screen. The same page
-is served at `verify.aotrust.link`, which additionally checks receipts on the server side.
+→ paste a receipt; the page states the exact hashing it applies — leaf `SHA-256(0x00 ‖ record)`, node
+`SHA-256(0x01 ‖ left ‖ right)` — and the **Check against NEAR** button reads `get_root` from a public
+RPC, so the root on screen can be compared with the one mainnet stores, next to the anchor sequence.
+Nothing is sent to AOTrust for that comparison. If you would rather fold the audit path yourself,
+`tools/verify_inclusion.py` from step 2 does exactly that in one command. The same page is served at
+`verify.aotrust.link`, which additionally checks receipts server side.
 
 ### 6. Anchor once, by hand (optional, costs gas)
 
