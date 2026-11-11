@@ -1,0 +1,19 @@
+[package]
+name = "merkle-anchor"
+version = "1.0.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+path = "src/lib_minimal.rs"
+
+[dependencies]
+near-sdk = "4.1.1"
+
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+lto = true
+strip = true
+panic = "abort"
+codegen-units = 1
