@@ -64,10 +64,10 @@ const EXAMPLES = [
     "anchor_seq": 94
   },
   {
-    "label": "shield 91ce7b66 \u00b7 free, anchored at 95",
+    "label": "shield 91ce7b66 · free, anchored at 95",
     "pdr_b64": "AwEA7cT0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALl11lm/ECxm3lxob99z10UEfHe+mqPiOvzd0tBHrhvMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEqcN0IpH3lwTPc74wxPaAtbI0oasp9ypnnivpc7/Pa6v+HKfQBS4XcW/IJTFr3ED7titGfZ4qNAvJd2KnCaYQM=",
     "note": "Real receipt from the public log (shield 91ce7b66, 2026-11-11 19:41:33Z). Free record: no anchor root committed, so the chain check has nothing to compare.",
-    "anchor_seq": 94,
+    "anchor_seq": 95,
     "leaf": "6aa443b098522d2062ba504b179f8a6a5cd40af6d313275af88b3154da3fa8eb",
     "index": 236,
     "size": 237,
@@ -80,10 +80,10 @@ const EXAMPLES = [
     ]
   },
   {
-    "label": "shield 266e9612 \u00b7 free, anchored at 96",
+    "label": "shield 266e9612 · free, anchored at 96",
     "pdr_b64": "AwEA6cv0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeK54EoibFcCH2VEZu8k/W91wH9ZFbe2ugnhCfXqh2DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANn//bPUHfDxUbfA+LqIRXAHiDI4S8NOAot2PHvAaLrXMhAbmNKrqnBpV0CbhX7ZlVK1KUbcT2WGaGj6ujAVMwg=",
     "note": "Real receipt from the public log (shield 266e9612, 2026-11-11 20:11:21Z). Free record: no anchor root committed, so the chain check has nothing to compare.",
-    "anchor_seq": 94,
+    "anchor_seq": 96,
     "leaf": "503b4c7d0a783735adb6988ddb204b78242f379af1d8f1a47c19f0ff6746713c",
     "index": 239,
     "size": 245,
