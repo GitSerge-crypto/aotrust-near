@@ -199,6 +199,21 @@ python3 scripts/anchor.py --leaves leaves.jsonl --send
 chain. The line is appended to `anchors.jsonl` only after that read-back matches; on mismatch the
 script exits non-zero, prints the transaction hash, and records nothing.
 
+
+## Paid tier: the record names the paying wallet
+
+The demo above uses the free tier, which proves existence only. The paid tier adds the
+link that matters in a dispute: the receipt is issued **after a payment from the agent's
+wallet**, and the record carries the payer address, so the file is tied to that wallet
+through the payment itself - not through a claim of authorship.
+
+Live example from this log (paid, x402 USDC on Base):
+`https://verify.aotrust.link/s/44ef8cb3` - payer `0x9727...8a9D`, anchored in the same
+cumulative Merkle tree on NEAR.
+
+What the paid tier does **not** claim: authorship, ownership or legal title. It claims
+only that a payment came from that wallet and that the file existed at that moment.
+
 ## What NEAR does here
 
 - **Hourly anchor.** A timer runs one anchor pass per hour. If new leaves exist since the last
