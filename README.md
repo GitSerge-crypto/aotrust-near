@@ -58,6 +58,16 @@ This repository is the code for (2) and (3), plus the verifiers that make (1) ch
 | `SECURITY.md` | how to report a vulnerability, scope, key policy |
 | `DEMO_SCRIPT.md` | shot list for the 90-second demo recording |
 
+
+## Live verifier (hosted, runs in your browser)
+
+**https://gitserge-crypto.github.io/aotrust-near/verify/**
+
+Open it and press "Check against NEAR": the page parses the 239-byte receipt, verifies the
+Ed25519 signature with your browser's WebCrypto (the fallback is @noble/ed25519) and reads
+`get_root(seq)` straight from the public NEAR RPC - no AOTrust backend in the path.
+Nothing is uploaded anywhere; the receipt you paste stays in the tab.
+
 ## Try it
 
 Steps 1–3 and 5 run from a clone with no data and no credentials: stdlib Python and a browser.
