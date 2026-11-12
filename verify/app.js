@@ -47,9 +47,9 @@ const PAYMENT_TYPES = {
  * is compared against notary-node.near on the button press. */
 const EXAMPLES = [
   {
-    "label": "anchored \u00b7 anchor 94",
+    "label": "anchored · anchor 94",
     "pdr_b64": "AwEFA6L0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP2IXYc7qTouh+piEViiyGYJ63YdLJTxvJMoZdhJtF82AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADueh04v6jfyIpVyWbfCPactDGhYlr1GjsgbRSRLjXFG/8gvweFq/RBFq5V4vW98DJsOiExZuc9S+WlOehBKVG8o795xK5+6gQWoX6zl5TS7D7z0gK9fQ8K4d14lYgblAk=",
-    "note": "Real receipt, ledger record 230 \u2014 the last leaf of the tree anchored at seq 94. Its published inclusion path is bundled, so the root is folded in this tab.",
+    "note": "Real receipt, ledger record 230 — the last leaf of the tree anchored at seq 94. Its published inclusion path is bundled, so the root is folded in this tab.",
     "leaf": "1498211e1c9ce82eae7dcff76a49f330efb8b0b8dd213a8883cfc6a7273b5514",
     "index": 235,
     "size": 236,
@@ -64,16 +64,39 @@ const EXAMPLES = [
     "anchor_seq": 94
   },
   {
-    "label": "shield 91ce7b66",
+    "label": "shield 91ce7b66 \u00b7 free, anchored at 95",
     "pdr_b64": "AwEA7cT0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALl11lm/ECxm3lxob99z10UEfHe+mqPiOvzd0tBHrhvMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEqcN0IpH3lwTPc74wxPaAtbI0oasp9ypnnivpc7/Pa6v+HKfQBS4XcW/IJTFr3ED7titGfZ4qNAvJd2KnCaYQM=",
     "note": "Real receipt from the public log (shield 91ce7b66, 2026-11-11 19:41:33Z). Free record: no anchor root committed, so the chain check has nothing to compare.",
-    "anchor_seq": 94
+    "anchor_seq": 94,
+    "leaf": "6aa443b098522d2062ba504b179f8a6a5cd40af6d313275af88b3154da3fa8eb",
+    "index": 236,
+    "size": 237,
+    "path": [
+      "c9f3f5b91051c9a68d51f6735ca0776a0f3743081c3715edc7c733f2522c7a26",
+      "ae21215ff42f151cb710d4791a54daa0d4edd1cd367c217ab1c2d1d763019256",
+      "afbce9df3b933040941d06b1d957aadd53664344fa8aaf0db60b5f0970c54772",
+      "c1a44c23563d9b15bc5813fd994f9775ad1fe4ceb3524eeeb84fd8c8bdeddf2d",
+      "fb5de336a99a01dc0951c25cfba642c894ba25886f76b9d0cf5418bbc8aa0858"
+    ]
   },
   {
-    "label": "shield 266e9612",
+    "label": "shield 266e9612 \u00b7 free, anchored at 96",
     "pdr_b64": "AwEA6cv0agAAAABub3Rhcnktbm9kZS5uZWFyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAeK54EoibFcCH2VEZu8k/W91wH9ZFbe2ugnhCfXqh2DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANn//bPUHfDxUbfA+LqIRXAHiDI4S8NOAot2PHvAaLrXMhAbmNKrqnBpV0CbhX7ZlVK1KUbcT2WGaGj6ujAVMwg=",
     "note": "Real receipt from the public log (shield 266e9612, 2026-11-11 20:11:21Z). Free record: no anchor root committed, so the chain check has nothing to compare.",
-    "anchor_seq": 94
+    "anchor_seq": 94,
+    "leaf": "503b4c7d0a783735adb6988ddb204b78242f379af1d8f1a47c19f0ff6746713c",
+    "index": 239,
+    "size": 245,
+    "path": [
+      "b56ec2d9d081104873bcb7d034e2d847cc0c07aeb53b05384eb07a33fc209623",
+      "9eeeb1cc6a602f12f9732e1cee358453c182c8a3e259948b47ceef5dc22c6c38",
+      "c9f3f5b91051c9a68d51f6735ca0776a0f3743081c3715edc7c733f2522c7a26",
+      "ae21215ff42f151cb710d4791a54daa0d4edd1cd367c217ab1c2d1d763019256",
+      "6bab9ee5612a644a2a16555d72c2accbd4e9353a89bd59717cb7f416774ce2ed",
+      "afbce9df3b933040941d06b1d957aadd53664344fa8aaf0db60b5f0970c54772",
+      "c1a44c23563d9b15bc5813fd994f9775ad1fe4ceb3524eeeb84fd8c8bdeddf2d",
+      "fb5de336a99a01dc0951c25cfba642c894ba25886f76b9d0cf5418bbc8aa0858"
+    ]
   }
 ];
 
